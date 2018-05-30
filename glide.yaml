@@ -1,0 +1,4 @@
+package: github.com/cli-server
+import:
+- package: github.com/labstack/echo
+  version: ^3.3.5
