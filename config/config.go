@@ -1,9 +1,9 @@
 package config
 
 const (
-	USER     string = "root"
-	PASSWORD string = "Pa$$w0rd"
-	DB       string = "cli-server"
-	HOST     string = "127.0.0.1"
-	PORT     string = "32769"
+	USER     string = "cliadmin"
+	PASSWORD string = "Passw0rd"
+	DB       string = "clidb"
+	HOST     string = "120.25.165.247"
+	PORT     string = "3306"
 )
