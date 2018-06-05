@@ -1,4 +1,4 @@
-package config
+package conf
 
 const (
 	USER     string = "cliadmin"
