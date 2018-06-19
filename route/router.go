@@ -2,6 +2,7 @@ package route
 
 import (
   // "github.com/cli-server/api"
+  "github.com/cli-server/db"
   "github.com/cli-server/handler"
   myMw "github.com/cli-server/middleware"
 	"github.com/labstack/echo"
@@ -31,6 +32,7 @@ func Init() *echo.Echo {
 	// Stats
 	s := myMw.NewStats()
 	e.Use(s.Process)
+  db.Init()
 
   // Server header
 	e.Use(myMw.ServerHeader)
