@@ -2,7 +2,6 @@ package model
 
 import (
 	// "time"
-  "fmt"
 
 	"github.com/gocraft/dbr"
 )
@@ -55,18 +54,8 @@ func (u *User) Load(tx *dbr.Tx, open_id string) (int, error) {
 
 type Users []User
 
-func (u *Users) Load(tx *dbr.Tx, open_id string) (int, error) {
-
-  // dbr.Condition => dbr.Builder
-  // LoadStruct(m) => Load(m)
-  // see more: https://godoc.org/github.com/gocraft/dbr#Builder
-	var builder dbr.Builder
-	if open_id != "" {
-		builder = dbr.Eq("open_id", open_id)
-	}
-
+func (u *Users) Load(tx *dbr.Tx) (int, error) {
 	return tx.Select("*").
 		From("User").
-		Where(builder).
 		Load(u)
 }

@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	//"time"
 
   "github.com/Sirupsen/logrus"
