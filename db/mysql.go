@@ -1,37 +1,33 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
 	//"time"
 
-	"github.com/cli-server/conf"
+  "github.com/Sirupsen/logrus"
+  "github.com/cli-server/conf"
 	_ "github.com/go-sql-driver/mysql"
+  "github.com/gocraft/dbr"
 )
 
-func Init() {
-	db, err := sql.Open("mysql",
-		conf.USER+":"+conf.PASSWORD+"@tcp("+conf.HOST+":"+conf.PORT+")/"+conf.DB)
-  fmt.Println(db)
-  // A recommended way to check err with more situations considerated.
-  // err, _ = db.Exec("DO 1")
-  checkErr(err)
-  defer db.Close()
+func Init() *dbr.Session {
 
-	// Debug: 插入数据
-	// stmt, err := db.Prepare("INSERT User SET openId=?,name=?,avatar=?,phone=?")
-	// checkErr(err)
-	// res, err := stmt.Exec("a12", "astaxie", "http://a.png", "13712321234")
-	// checkErr(err)
-	// id, err := res.LastInsertId()
-	// checkErr(err)
-	// fmt.Println(id)
-  
-  // TODO: to learn basic mysql: https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/05.2.md
+	session := getSession()
+
+	return session
 }
 
-func checkErr(err error) {
+func getSession() *dbr.Session {
+
+	db, err := dbr.Open("mysql",
+		conf.USER+":"+conf.PASSWORD+"@tcp("+conf.HOST+":"+conf.PORT+")/"+conf.DB,
+  	nil)
+
 	if err != nil {
-		panic(err)
+		logrus.Error(err)
+	} else {
+		session := db.NewSession(nil)
+		return session
 	}
+	return nil
 }

@@ -1,1 +1,65 @@
 package api
+
+
+import (
+	// "strconv"
+  // "fmt"
+
+	"github.com/Sirupsen/logrus"
+	"github.com/cli-server/model"
+	"github.com/gocraft/dbr"
+	"github.com/labstack/echo"
+	"github.com/valyala/fasthttp"
+)
+
+func PostUser() echo.HandlerFunc {
+	return func(c echo.Context) (err error) {
+
+		m := new(model.User)
+    if err = c.Bind(m); err != nil {
+			logrus.Debug(err)
+			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
+    }
+
+		tx := c.Get("Tx").(*dbr.Tx)
+
+		user := model.NewUser(m.OpenId, m.Name, m.Avatar, m.Phone)
+
+		if err := user.Save(tx); err != nil {
+			logrus.Debug(err)
+			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
+		}
+		return c.JSON(fasthttp.StatusCreated, user)
+	}
+}
+
+func GetUser() echo.HandlerFunc {
+	return func(c echo.Context) (err error) {
+
+		openId := c.Param("open_id")
+
+		tx := c.Get("Tx").(*dbr.Tx)
+
+		user := new(model.User)
+		if _, err := user.Load(tx, openId); err != nil {
+			logrus.Debug(err)
+			return echo.NewHTTPError(fasthttp.StatusNotFound, "User does not exists.")
+		}
+		return c.JSON(fasthttp.StatusOK, user)
+	}
+}
+
+func GetUsers() echo.HandlerFunc {
+	return func(c echo.Context) (err error) {
+		tx := c.Get("Tx").(*dbr.Tx)
+
+		openId := c.QueryParam("open_id")
+		users := new(model.Users)
+		if _, err = users.Load(tx, openId); err != nil {
+			logrus.Debug(err)
+			return echo.NewHTTPError(fasthttp.StatusNotFound, "User does not exists.")
+		}
+
+		return c.JSON(fasthttp.StatusOK, users)
+	}
+}

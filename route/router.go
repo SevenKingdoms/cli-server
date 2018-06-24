@@ -1,7 +1,7 @@
 package route
 
 import (
-  // "github.com/cli-server/api"
+  "github.com/cli-server/api"
   "github.com/cli-server/db"
   "github.com/cli-server/handler"
   myMw "github.com/cli-server/middleware"
@@ -32,7 +32,8 @@ func Init() *echo.Echo {
 	// Stats
 	s := myMw.NewStats()
 	e.Use(s.Process)
-  db.Init()
+  // TransactionHandler
+	e.Use(myMw.TransactionHandler(db.Init()))
 
   // Server header
 	e.Use(myMw.ServerHeader)
@@ -46,10 +47,10 @@ func Init() *echo.Echo {
 	{
     // TODO: Use True Api
     // Creat/Update an User
-    users.POST("", s.Handle)
+    users.POST("", api.PostUser())
     // Get an User
-    users.GET("", s.Handle)
-    users.GET("/:open_id", s.Handle)
+    users.GET("", api.GetUsers())
+    users.GET("/:open_id", api.GetUser())
 	}
 
 	return e
