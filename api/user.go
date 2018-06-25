@@ -30,7 +30,7 @@ func PostUser() echo.HandlerFunc {
 			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
 		}
 		return c.JSON(fasthttp.StatusCreated,
-      NewJSON("OK", "成功创建用户", user))
+      NewJSON("OK", "成功创建/更新用户", user))
 	}
 }
 
