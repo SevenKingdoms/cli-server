@@ -3,7 +3,6 @@ package api
 import (
 	// "strconv"
 	// "fmt"
-
 	"github.com/Sirupsen/logrus"
 	"github.com/cli-server/model"
 	"github.com/gocraft/dbr"
@@ -13,7 +12,6 @@ import (
 
 func PostUser() echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
-
 		m := new(model.User)
 		if err = c.Bind(m); err != nil {
 			logrus.Debug(err)
@@ -29,11 +27,7 @@ func PostUser() echo.HandlerFunc {
 			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
 		}
 		return c.JSON(fasthttp.StatusCreated,
-<<<<<<< HEAD
-			NewJSON("OK", "成功创建用户", user))
-=======
-      NewJSON("OK", "成功创建/更新用户", user))
->>>>>>> 2ba8a575b266b4111ad27ae29e719e7bb93efd75
+			NewJSON("OK", "成功创建/更新用户", user))
 	}
 }
 
