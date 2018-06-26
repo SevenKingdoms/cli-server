@@ -74,8 +74,35 @@ func Init() *echo.Echo {
 		//Get all Merchants
 		merchants.GET("", api.GetAllMerchant())
 		//get merchant with id
-		merchants.GET("/:id", api.GetMerchant())
+		merchants.GET("/:merchant_id", api.GetMerchant())
 		//TODO: update merchant with id
+	}
+	foods := e.Group("/api/foods")
+	{
+		//Get all Foods by MerchantID
+		foods.GET("/:merchan_id", api.GetFoodsByMerchantId())
+		// Create a New Food,with a merchant-id
+		foods.POST("", api.PostFood())
+		// Get a Food by FoodID
+		foods.GET("/:food_id", api.GetFoodByFoodId())
+		// Update a Food by FoodID
+		foods.POST("", api.PostFood())
+		//Delete a Food by FoodID
+		foods.DELETE("/:food_id", api.DeleteFood())
+	}
+	orders := e.Group("/api/orders")
+	{
+		//Orders / Get all Orders by OpenID
+		orders.GET("/:open_id", api.GetOrdersByOpenId())
+		//Orders / Get all Orders by MerchantID
+		orders.GET("/:merchant_id", api.GetOrdersByMerchant())
+		//Orders / Get an Order by OrderID
+		orders.GET("/:order_id", api.GetOrdersByOrderId())
+		//create/ Update an Order by OrderID
+		orders.POST("", api.PostOrder())
+		//Orders / Delete an Order by OrderID
+		orders.DELETE("/:order_id", api.DeleteOrderByOrderId())
+
 	}
 
 	return e

@@ -50,7 +50,7 @@ func PostMerchant() echo.HandlerFunc {
 
 func GetMerchant() echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
-		id := c.Param("id")
+		id := c.Param("merchant_id")
 		number, _ := strconv.ParseInt(id, 0, 64)
 
 		tx := c.Get("Tx").(*dbr.Tx)
