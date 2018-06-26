@@ -55,5 +55,18 @@ func Init() *echo.Echo {
     users.GET("/:open_id", api.GetUser())
 	}
 
+  //Merchants Collection
+  merchants:= e.Group("/api/merchants/"){
+    // TODO: Use True Api
+
+    //Get all Merchants
+    merchants.GET("", api.GetAllMerchant())
+    //post a merchants
+    merchants.POST("", api.PostMerchant())
+    //get merchant with id
+    merchants.Get("/:id",api.GetMerchant())
+    //TODO: update merchant with id
+  }
+
 	return e
 }
