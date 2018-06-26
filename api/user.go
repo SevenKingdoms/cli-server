@@ -2,7 +2,7 @@ package api
 
 import (
 	// "strconv"
-	"fmt"
+	// "fmt"
 	"github.com/Sirupsen/logrus"
 	"github.com/cli-server/model"
 	"github.com/gocraft/dbr"
@@ -22,8 +22,6 @@ func PostUser() echo.HandlerFunc {
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		user := model.NewUser(m.OpenId, m.Name, m.Avatar, m.Phone)
-
-    fmt.Println(m.OpenId)
 
 		if err := user.Save(tx); err != nil {
 			logrus.Debug(err)
