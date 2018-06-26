@@ -26,6 +26,7 @@ func PostOrder() echo.HandlerFunc {
 		order := model.NewOrder(m.Id, m.NumOfPeople, m.DeskId, m.Remark, m.User_OpenId, m.Merchant_id, m.Status)
 
 		if err := order.Save(tx); err != nil {
+
 			logrus.Debug(err)
 			return c.JSON(fasthttp.StatusBadRequest,
 				NewJSON("OK", "创建/更新订单失败", nil))

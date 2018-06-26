@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"strconv"
 	// "fmt"
 	"github.com/Sirupsen/logrus"
@@ -13,6 +14,7 @@ import (
 func PostFood() echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
 		f := new(model.Food)
+		fmt.Println(f)
 		if err = c.Bind(f); err != nil {
 			logrus.Debug(err)
 			return echo.NewHTTPError(fasthttp.StatusInternalServerError)

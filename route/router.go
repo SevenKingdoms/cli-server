@@ -42,22 +42,22 @@ func Init() *echo.Echo {
 	//-------------------
 	e.GET("/stats", s.Handle) // Endpoint to get stats
 
-  // Auth
-  e.GET("/api/openid", api.GetOpenid())
-  e.GET("/api/jwt", api.GetJWT())
+	// Auth
+	e.GET("/api/openid", api.GetOpenid())
+	e.GET("/api/jwt", api.GetJWT())
 
-  // --- Restricted groups
+	// --- Restricted groups
 
-  // Configure middleware with the custom claims type
-  config := echoMw.JWTConfig{
-    Claims:     &api.JWTCustomClaims{},
-    SigningKey: []byte("secret"),
-  }
+	// Configure middleware with the custom claims type
+	/*config := echoMw.JWTConfig{
+	  Claims:     &api.JWTCustomClaims{},
+	  SigningKey: []byte("secret"),
+	}*/
 
-  // Users Collection
+	// Users Collection
 	users := e.Group("/api/users")
 	{
-    // users.Use(echoMw.JWTWithConfig(config))
+		// users.Use(echoMw.JWTWithConfig(config))
 
 		// Creat/Update an User
 		users.POST("", api.PostUser())
@@ -85,7 +85,7 @@ func Init() *echo.Echo {
 		// Get a Food by FoodID
 		foods.GET("/:food_id", api.GetFoodByFoodId())
 		//Get all Foods by MerchantID
-		foods.GET("/:merchan_id", api.GetFoodsByMerchantId())
+		foods.GET("", api.GetFoodsByMerchantId())
 		//Delete a Food by FoodID
 		foods.DELETE("/:food_id", api.DeleteFood())
 	}

@@ -42,17 +42,19 @@ func (u *Order) Save(tx *dbr.Tx) error {
 		Load(&tempOrder)
 
 	if count == 0 {
+		//fmt.Println("here error")
 		// if user not exists, Create
 		_, err = tx.InsertInto("Order").
 			Pair("id", u.Id).
-			Pair("date", u.Date).
 			Pair("numOfPeople", u.NumOfPeople).
 			Pair("deskId", u.DeskId).
 			Pair("remark", u.Remark).
 			Pair("User_openId", u.User_OpenId).
 			Pair("Merchant_id", u.Merchant_id).
 			Pair("status", u.Status).
+			Pair("date", "201512111200").
 			Exec()
+		return err
 	} else {
 		// if order exists, Update
 		_, err = tx.Update("Order").
@@ -65,9 +67,9 @@ func (u *Order) Save(tx *dbr.Tx) error {
 			Set("status", u.Status).
 			Where("id = ?", u.Id).
 			Exec()
+		return err
 	}
 
-	return err
 }
 
 type Orders []Order
