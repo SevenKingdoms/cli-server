@@ -46,6 +46,8 @@ func GetUser() echo.HandlerFunc {
 			logrus.Debug(err)
 			return echo.NewHTTPError(fasthttp.StatusNotFound, "User does not exists.")
 		}
+    // fix the missing of openId
+    user.OpenId = openId
 		return c.JSON(fasthttp.StatusOK,
       NewJSON("OK", "成功获取用户", user))
 	}
