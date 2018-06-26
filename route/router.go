@@ -55,8 +55,8 @@ func Init() *echo.Echo {
 	//Merchants Collection
 	merchants := e.Group("/api/merchants")
 	{
-    //post a merchants
-    merchants.POST("", api.PostMerchant())
+		//post a merchants
+		merchants.POST("", api.PostMerchant())
 		//Get all Merchants
 		merchants.GET("", api.GetAllMerchant())
 		//get merchant with id
@@ -65,27 +65,28 @@ func Init() *echo.Echo {
 	}
 	foods := e.Group("/api/foods")
 	{
-		//Get all Foods by MerchantID
-		foods.GET("/:merchan_id", api.GetFoodsByMerchantId())
-		// Create a New Food,with a merchant-id
+		// Create、Update a New Food,with a merchant-id
 		foods.POST("", api.PostFood())
+
 		// Get a Food by FoodID
 		foods.GET("/:food_id", api.GetFoodByFoodId())
-		// Update a Food by FoodID
-		foods.POST("", api.PostFood())
+		//Get all Foods by MerchantID
+		foods.GET("/:merchan_id", api.GetFoodsByMerchantId())
 		//Delete a Food by FoodID
 		foods.DELETE("/:food_id", api.DeleteFood())
 	}
 	orders := e.Group("/api/orders")
 	{
+		//create/ Update an Order by OrderID
+		orders.POST("", api.PostOrder())
+
 		//Orders / Get all Orders by OpenID
 		orders.GET("/:open_id", api.GetOrdersByOpenId())
 		//Orders / Get all Orders by MerchantID
-		orders.GET("/:merchant_id", api.GetOrdersByMerchant())
+		orders.GET("/:merchant_id", api.GetOrdersByMerchantId())
 		//Orders / Get an Order by OrderID
-		orders.GET("/:order_id", api.GetOrdersByOrderId())
-		//create/ Update an Order by OrderID
-		orders.POST("", api.PostOrder())
+		orders.GET("/:order_id", api.GetOrderByOrderId())
+
 		//Orders / Delete an Order by OrderID
 		orders.DELETE("/:order_id", api.DeleteOrderByOrderId())
 

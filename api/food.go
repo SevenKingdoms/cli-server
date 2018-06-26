@@ -13,14 +13,14 @@ import (
 func PostFood() echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
 		f := new(model.Food)
-		if err = c.Bind(m); err != nil {
+		if err = c.Bind(f); err != nil {
 			logrus.Debug(err)
 			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
 		}
 
 		tx := c.Get("Tx").(*dbr.Tx)
 
-		food := model.NewMerchant(f.Id, f.Name, f.Images, f.Type, f.Price,
+		food := model.NewFood(f.Id, f.Name, f.Images, f.Type, f.Price,
 			f.HotIndex, f.Introduction, f.Merchant_id)
 
 		if err := food.Save(tx); err != nil {
@@ -28,7 +28,7 @@ func PostFood() echo.HandlerFunc {
 			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
 		}
 		return c.JSON(fasthttp.StatusCreated,
-			NewJSON("OK", "成功创建/更改食品", merchant))
+			NewJSON("OK", "成功创建/更改食品", food))
 	}
 }
 
@@ -41,7 +41,7 @@ func GetFoodsByMerchantId() echo.HandlerFunc {
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		foods := new(model.Foods)
-		if _, err := foods.mearchant_Load(tx, number); err != nil {
+		if _, err := foods.MerchantLoad(tx, number); err != nil {
 			logrus.Debug(err)
 			return echo.NewHTTPError(fasthttp.StatusNotFound, "Food in this merchant does not exists.")
 		}
@@ -64,7 +64,7 @@ func GetFoodByFoodId() echo.HandlerFunc {
 			return echo.NewHTTPError(fasthttp.StatusNotFound, "Food  does not exists.")
 		}
 		return c.JSON(fasthttp.StatusOK,
-			NewJSON("OK", "成功获取食品", merchant))
+			NewJSON("OK", "成功获取食品", food))
 
 	}
 }
@@ -78,7 +78,7 @@ func DeleteFood() echo.HandlerFunc {
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		food := new(model.Food)
-		if _, err := food.food_delete(tx, number); err != nil {
+		if err := food.FoodDelete(tx, number); err != nil {
 			logrus.Debug(err)
 			return echo.NewHTTPError(fasthttp.StatusNotFound, "Food  does not exists.")
 		}

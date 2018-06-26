@@ -62,7 +62,7 @@ func (f *Food) Save(tx *dbr.Tx) error {
 			Set("hotIndex", f.HotIndex).
 			Set("introduction", f.Introduction).
 			Set("Merchant_id", f.Merchant_id).
-			Where("id = ?", f.id).
+			Where("id = ?", f.Id).
 			Exec()
 	}
 
@@ -72,23 +72,24 @@ func (f *Food) Save(tx *dbr.Tx) error {
 func (f *Food) Load(tx *dbr.Tx, id int64) (int, error) {
 	return tx.Select("*").
 		From("Food").
-		Where("id = ?", f.id).
+		Where("id = ?", id).
 		Load(f)
-}
-
-func (f *Food) mearchant_Load(tx *dbr, merchant_id int64) (int, error) {
-	return tx.Select("*").
-		From("Food").
-		Where("Merchant_id = ?", f.Merchant_id).
-		Load(f)
-
-}
-
-func (f *Food) food_delete(tx *dbr, food_id int64) (int, error) {
-	return tx.DeleteFrom("Food").Where("id = ?", food_id).Exec()
 }
 
 type Foods []Food
+
+func (f *Foods) MerchantLoad(tx *dbr.Tx, merchant_id int64) (int, error) {
+	return tx.Select("*").
+		From("Food").
+		Where("Merchant_id = ?", merchant_id).
+		Load(f)
+
+}
+
+func (f *Food) FoodDelete(tx *dbr.Tx, food_id int64) error {
+	_, err := tx.DeleteFrom("Food").Where("id = ?", food_id).Exec()
+	return err
+}
 
 func (u *Foods) Load(tx *dbr.Tx) (int, error) {
 	return tx.Select("*").
