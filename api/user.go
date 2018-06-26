@@ -15,7 +15,8 @@ func PostUser() echo.HandlerFunc {
 		m := new(model.User)
 		if err = c.Bind(m); err != nil {
 			logrus.Debug(err)
-			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
+  		return c.JSON(fasthttp.StatusInternalServerError,
+  			NewJSON("OK", "内部错误", nil))
 		}
 
 		tx := c.Get("Tx").(*dbr.Tx)
@@ -24,7 +25,8 @@ func PostUser() echo.HandlerFunc {
 
 		if err := user.Save(tx); err != nil {
 			logrus.Debug(err)
-			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
+  		return c.JSON(fasthttp.StatusBadRequest,
+  			NewJSON("OK", "创建/更新用户失败", nil))
 		}
 		return c.JSON(fasthttp.StatusCreated,
 			NewJSON("OK", "成功创建/更新用户", user))
@@ -41,7 +43,8 @@ func GetUser() echo.HandlerFunc {
 		user := new(model.User)
 		if _, err := user.Load(tx, openId); err != nil {
 			logrus.Debug(err)
-			return echo.NewHTTPError(fasthttp.StatusNotFound, "User does not exists.")
+  		return c.JSON(fasthttp.StatusOK,
+  			NewJSON("OK", "用户不存在", nil))
 		}
     // fix the missing of openId
     user.OpenId = openId
@@ -57,7 +60,8 @@ func GetUsers() echo.HandlerFunc {
 		users := new(model.Users)
 		if _, err = users.Load(tx); err != nil {
 			logrus.Debug(err)
-			return echo.NewHTTPError(fasthttp.StatusNotFound, "User does not exists.")
+  		return c.JSON(fasthttp.StatusOK,
+  			NewJSON("OK", "用户不存在", nil))
 		}
 
 		return c.JSON(fasthttp.StatusOK,
