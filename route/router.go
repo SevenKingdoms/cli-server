@@ -48,7 +48,6 @@ func Init() *echo.Echo {
   // Users Collection
 	users := e.Group("/api/users")
 	{
-		// TODO: Use True Api
 		// Creat/Update an User
 		users.POST("", api.PostUser())
 		// Get an User
@@ -59,12 +58,10 @@ func Init() *echo.Echo {
 	//Merchants Collection
 	merchants := e.Group("/api/merchants")
 	{
-		// TODO: Use True Api
-
+    //post a merchants
+    merchants.POST("", api.PostMerchant())
 		//Get all Merchants
 		merchants.GET("", api.GetAllMerchant())
-		//post a merchants
-		merchants.POST("", api.PostMerchant())
 		//get merchant with id
 		merchants.GET("/:id", api.GetMerchant())
 		//TODO: update merchant with id
