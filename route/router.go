@@ -42,13 +42,10 @@ func Init() *echo.Echo {
 	//-------------------
 	e.GET("/stats", s.Handle) // Endpoint to get stats
 
-<<<<<<< HEAD
-	// Users Collection
-=======
+  // Auth
   e.GET("/api/openid", api.GetOpenid())
 
   // Users Collection
->>>>>>> 63bc42fdf18e01aeee1a0a152173a05a864cca97
 	users := e.Group("/api/users")
 	{
 		// TODO: Use True Api
