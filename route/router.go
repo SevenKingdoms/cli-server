@@ -42,6 +42,8 @@ func Init() *echo.Echo {
 	//-------------------
 	e.GET("/stats", s.Handle) // Endpoint to get stats
 
+  e.GET("/api/openid", api.GetOpenid())
+
   // Users Collection
 	users := e.Group("/api/users")
 	{
