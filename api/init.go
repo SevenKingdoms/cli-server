@@ -2,6 +2,8 @@ package api
 
 import (
   "time"
+
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 // JSON is a standard form of response data
@@ -10,6 +12,13 @@ type JSON struct {
 	Message   string      `json:"message"`
 	Data      interface{} `json:"data"`
 	CreatedAt string      `json:"createdAt"`
+}
+
+// JWTCustomClaims are custom claims extending default ones.
+type JWTCustomClaims struct {
+	Username  string `json:"username"`
+	Admin     bool   `json:"admin"`
+	jwt.StandardClaims
 }
 
 const (

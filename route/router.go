@@ -44,10 +44,21 @@ func Init() *echo.Echo {
 
   // Auth
   e.GET("/api/openid", api.GetOpenid())
+  e.GET("/api/jwt", api.GetJWT())
+
+  // --- Restricted groups
+
+  // Configure middleware with the custom claims type
+  config := echoMw.JWTConfig{
+    Claims:     &api.JWTCustomClaims{},
+    SigningKey: []byte("secret"),
+  }
 
   // Users Collection
 	users := e.Group("/api/users")
 	{
+    // users.Use(echoMw.JWTWithConfig(config))
+
 		// Creat/Update an User
 		users.POST("", api.PostUser())
 		// Get an User
