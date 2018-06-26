@@ -1,9 +1,8 @@
 package api
 
-
 import (
 	// "strconv"
-  // "fmt"
+	// "fmt"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/cli-server/model"
@@ -16,10 +15,10 @@ func PostUser() echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
 
 		m := new(model.User)
-    if err = c.Bind(m); err != nil {
+		if err = c.Bind(m); err != nil {
 			logrus.Debug(err)
 			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
-    }
+		}
 
 		tx := c.Get("Tx").(*dbr.Tx)
 
@@ -30,7 +29,7 @@ func PostUser() echo.HandlerFunc {
 			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
 		}
 		return c.JSON(fasthttp.StatusCreated,
-      NewJSON("OK", "成功创建用户", user))
+			NewJSON("OK", "成功创建用户", user))
 	}
 }
 
@@ -47,7 +46,7 @@ func GetUser() echo.HandlerFunc {
 			return echo.NewHTTPError(fasthttp.StatusNotFound, "User does not exists.")
 		}
 		return c.JSON(fasthttp.StatusOK,
-      NewJSON("OK", "成功获取用户", user))
+			NewJSON("OK", "成功获取用户", user))
 	}
 }
 
@@ -62,6 +61,6 @@ func GetUsers() echo.HandlerFunc {
 		}
 
 		return c.JSON(fasthttp.StatusOK,
-      NewJSON("OK", "成功获取用户列表", users))
+			NewJSON("OK", "成功获取用户列表", users))
 	}
 }
