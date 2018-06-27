@@ -41,11 +41,16 @@ func GetUser() echo.HandlerFunc {
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		user := new(model.User)
-		if _, err := user.Load(tx, openId); err != nil {
+    count, err := user.Load(tx, openId)
+    if err != nil {
 			logrus.Debug(err)
-  		return c.JSON(fasthttp.StatusOK,
-  			NewJSON("OK", "用户不存在", nil))
+  		return c.JSON(fasthttp.StatusInternalServerError,
+  			NewJSON("OK", "内部错误", nil))
 		}
+    if count == 0 {
+     return c.JSON(fasthttp.StatusOK,
+       NewJSON("OK", "用户不存在", nil))
+    }
     // fix the missing of openId
     user.OpenId = openId
 		return c.JSON(fasthttp.StatusOK,
