@@ -46,13 +46,9 @@ func Init() *echo.Echo {
 	e.GET("/api/openid", api.GetOpenid())
 	e.GET("/api/jwt", api.GetJWT())
 
-<<<<<<< HEAD
-	// --- Restricted groups
-=======
   e.GET("/api/register", api.PostUser())
 
   // --- Restricted groups
->>>>>>> 3eaa6e4ad5e3e0563150fe779968a5f0025d3bcf
 
 	// Configure middleware with the custom claims type
 	/*config := echoMw.JWTConfig{
@@ -63,13 +59,8 @@ func Init() *echo.Echo {
 	// Users Collection
 	users := e.Group("/api/users")
 	{
-<<<<<<< HEAD
 		// users.Use(echoMw.JWTWithConfig(config))
 
-=======
-    users.Use(echoMw.JWTWithConfig(config))
-    
->>>>>>> 3eaa6e4ad5e3e0563150fe779968a5f0025d3bcf
 		// Creat/Update an User
 		users.POST("", api.PostUser())
 		// Get an User
@@ -80,7 +71,7 @@ func Init() *echo.Echo {
 	//Merchants Collection
 	merchants := e.Group("/api/merchants")
 	{
-    users.Use(echoMw.JWTWithConfig(config))
+    // users.Use(echoMw.JWTWithConfig(config))
 
 		//post a merchants
 		merchants.POST("", api.PostMerchant())
@@ -91,7 +82,7 @@ func Init() *echo.Echo {
 	}
 	foods := e.Group("/api/foods")
 	{
-    users.Use(echoMw.JWTWithConfig(config))
+    // users.Use(echoMw.JWTWithConfig(config))
 
 		// Create、Update a New Food,with a merchant-id
 		foods.POST("", api.PostFood())
@@ -105,7 +96,7 @@ func Init() *echo.Echo {
 	}
 	orders := e.Group("/api/orders")
 	{
-    users.Use(echoMw.JWTWithConfig(config))
+    // users.Use(echoMw.JWTWithConfig(config))
 
 		//create/ Update an Order by OrderID
 		orders.POST("", api.PostOrder())
