@@ -12,6 +12,8 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 	"github.com/valyala/fasthttp"
+	"github.com/cli-server/model"
+  "github.com/gocraft/dbr"
 )
 
 func GetOpenid() echo.HandlerFunc {
@@ -43,16 +45,15 @@ func GetJWT() echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
 
     username := c.QueryParam("username")
-    // password := c.QueryParam("password")
+    password := c.QueryParam("password")
     userType := c.QueryParam("type")
 
-    valid := true
-
-  	if valid {
+    if valid := ValidUser(c, username, password, userType); valid == true {
   		// Set claims
   		claims := &JWTCustomClaims{
   			username,
-  			userType == "1",
+        password,
+  			userType == "0",
   			jwt.StandardClaims{
   				ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
   			},
@@ -70,8 +71,36 @@ func GetJWT() echo.HandlerFunc {
         NewJSON("OK", "验证成功", echo.Map{
     			"token": t,
     		}))
-  	}
+  	} else {
+      return c.JSON(fasthttp.StatusBadRequest,
+        NewJSON("Not OK", "用户验证失败", nil))
+    }
 
   	return echo.ErrUnauthorized
 	}
+}
+
+func ValidUser(c echo.Context, username, password, userType string) bool {
+
+	openId := username
+
+	tx := c.Get("Tx").(*dbr.Tx)
+
+  if userType == "0" { // admin
+    // TODO:
+  } else if userType == "1" { // user
+		user := new(model.User)
+    count, err := user.Load(tx, openId)
+    if err != nil {
+			logrus.Debug(err)
+      return false
+		}
+    if count == 0 {
+      return false
+    }
+    return true
+  } else { // merchant
+    // TODO:
+  }
+  return true
 }

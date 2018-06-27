@@ -16,7 +16,8 @@ type JSON struct {
 
 // JWTCustomClaims are custom claims extending default ones.
 type JWTCustomClaims struct {
-	Username  string `json:"username"`
+  Username  string `json:"username"`
+	Password  string `json:"password"`
 	Admin     bool   `json:"admin"`
 	jwt.StandardClaims
 }
