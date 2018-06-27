@@ -90,7 +90,7 @@ func Init() *echo.Echo {
 		//Get all Foods by MerchantID
 		foods.GET("", api.GetFoodsByMerchantId())
 		//Delete a Food by FoodID
-		foods.DELETE("", api.DeleteFood())
+		foods.DELETE("/:food_id", api.DeleteFood())
 	}
 	orders := e.Group("/api/orders")
 	{
