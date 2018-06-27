@@ -16,6 +16,7 @@ func JSONHTTPErrorHandler(err error, c echo.Context) {
   c.Logger().Error(err)
 	if !c.Response().Committed {
 		c.JSON(code, map[string]interface{}{
+      "status": "Not Good",
 			"statusCode": code,
 			"message":    msg,
 		})
