@@ -75,8 +75,8 @@ func Init() *echo.Echo {
 		merchants.POST("", api.PostMerchant())
 		//Get all Merchants
 		merchants.GET("", api.GetAllMerchant())
-		//get merchant with id
-		merchants.GET("/:merchant_id", api.GetMerchant())
+		//get merchant with tel
+		merchants.GET("/:tel", api.GetMerchant())
 	}
 	foods := e.Group("/api/foods")
 	{

@@ -1,7 +1,7 @@
 package api
 
 import (
-	"strconv"
+	// "strconv"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/cli-server/model"
@@ -20,8 +20,8 @@ func PostMerchant() echo.HandlerFunc {
 
 		tx := c.Get("Tx").(*dbr.Tx)
 
-		merchant := model.NewMerchant(m.ID, m.Name, m.HotIndex,
-			m.Introduction, m.Logo, m.Images, m.Account, m.Password)
+		merchant := model.NewMerchant(m.ID, m.HotIndex, m.Name,
+			m.Introduction, m.Logo, m.Address, m.Images, m.Tel, m.Password, m.OpenTime, m.Open)
 
 		if err := merchant.Save(tx); err != nil {
 			logrus.Debug(err)
@@ -30,25 +30,22 @@ func PostMerchant() echo.HandlerFunc {
 		}
 		return c.JSON(fasthttp.StatusCreated,
 			NewJSON("OK", "成功创建/更改商家", merchant))
-
 	}
 }
 func GetMerchant() echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
-		id := c.Param("merchant_id")
-		number, _ := strconv.ParseInt(id, 0, 64)
+		tel := c.Param("tel")
 
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		merchant := new(model.Merchant)
-		if _, err := merchant.Load(tx, number); err != nil {
+		if _, err := merchant.Load(tx, tel); err != nil {
 			logrus.Debug(err)
 			return c.JSON(fasthttp.StatusOK,
 				NewJSON("OK", "商家不存在", nil))
 		}
 		return c.JSON(fasthttp.StatusOK,
 			NewJSON("OK", "成功获取商家", merchant))
-
 	}
 }
 
