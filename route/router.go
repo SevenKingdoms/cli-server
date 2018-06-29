@@ -45,6 +45,7 @@ func Init() *echo.Echo {
 	// Auth
 	e.GET("/api/openid", api.GetOpenid())
 	e.GET("/api/jwt", api.GetJWT())
+  e.POST("/api/register", api.PostUser())
 
 	// --- Restricted groups
 
@@ -75,8 +76,8 @@ func Init() *echo.Echo {
 		merchants.POST("", api.PostMerchant())
 		//Get all Merchants
 		merchants.GET("", api.GetAllMerchant())
-		//get merchant with id
-		merchants.GET("/:merchant_id", api.GetMerchant())
+		//get merchant with tel
+		merchants.GET("/:tel", api.GetMerchant())
 	}
 	foods := e.Group("/api/foods")
 	{
