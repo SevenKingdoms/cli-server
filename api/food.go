@@ -17,17 +17,19 @@ func PostFood() echo.HandlerFunc {
 		fmt.Println(f)
 		if err = c.Bind(f); err != nil {
 			logrus.Debug(err)
-			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
+			return c.JSON(fasthttp.StatusInternalServerError,
+				NewJSON("OK", "内部错误", nil))
 		}
 
 		tx := c.Get("Tx").(*dbr.Tx)
 
-		food := model.NewFood(f.Id, f.Name, f.Images, f.Type, f.Price,
-			f.HotIndex, f.Introduction, f.Merchant_id)
+		food := model.NewFood(f.Id, f.Name, f.Image, f.Type, f.Price,
+			f.HotIndex, f.Introduction, f.Merchant_id, f.InStock)
 
 		if err := food.Save(tx); err != nil {
 			logrus.Debug(err)
-			return echo.NewHTTPError(fasthttp.StatusInternalServerError)
+			return c.JSON(fasthttp.StatusBadRequest,
+				NewJSON("OK", "创建/更新食物失败", nil))
 		}
 		return c.JSON(fasthttp.StatusCreated,
 			NewJSON("OK", "成功创建/更改食品", food))
@@ -43,9 +45,15 @@ func GetFoodsByMerchantId() echo.HandlerFunc {
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		foods := new(model.Foods)
-		if _, err := foods.MerchantLoad(tx, number); err != nil {
+		count, err := foods.MerchantLoad(tx, number)
+		if err != nil {
 			logrus.Debug(err)
-			return echo.NewHTTPError(fasthttp.StatusNotFound, "Food in this merchant does not exists.")
+			return c.JSON(fasthttp.StatusInternalServerError,
+				NewJSON("OK", "内部错误", nil))
+		}
+		if count == 0 {
+			return c.JSON(fasthttp.StatusOK,
+				NewJSON("OK", "商家不存在或者商家所拥有商品数量不足1", nil))
 		}
 		return c.JSON(fasthttp.StatusOK,
 			NewJSON("OK", "成功获取商家食品", foods))
@@ -61,9 +69,15 @@ func GetFoodByFoodId() echo.HandlerFunc {
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		food := new(model.Food)
-		if _, err := food.Load(tx, number); err != nil {
+		count, err := food.Load(tx, number)
+		if err != nil {
 			logrus.Debug(err)
-			return echo.NewHTTPError(fasthttp.StatusNotFound, "Food  does not exists.")
+			return c.JSON(fasthttp.StatusInternalServerError,
+				NewJSON("OK", "内部错误", nil))
+		}
+		if count == 0 {
+			return c.JSON(fasthttp.StatusOK,
+				NewJSON("OK", "食品不存在", nil))
 		}
 		return c.JSON(fasthttp.StatusOK,
 			NewJSON("OK", "成功获取食品", food))

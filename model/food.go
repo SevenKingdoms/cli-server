@@ -9,25 +9,27 @@ import (
 
 type Food struct {
 	Id           int64   `json:"food_id" form:"food_id" query:"food_id"`
-	Name         string  `json:"food_name" form:"food_name" query:"food_name"`
-	Images       string  `json:"food_images" form:"food_images" query:"food_images"`
-	Type         string  `json:"food_type" form:"food_type" query:"food_type"`
-	Price        float64 `json:"food_price" form:"food_price" query:"food_price"`
+	Name         string  `json:"name" form:"name" query:"name"`
+	Image        string  `json:"image" form:"image" query:"image"`
+	Type         string  `json:"type" form:"type" query:"type"`
+	Price        float64 `json:"price" form:"price" query:"price"`
 	HotIndex     int64   `json:"hotIndex" form:"hotIndex" query:"hotIndex"`
-	Introduction string  `json:"food_introduction" form:"food_introduction" query:"food_introduction"`
+	Introduction string  `json:"introduction" form:"introduction" query:"introduction"`
 	Merchant_id  int64   `json:"merchant_id" form:"merchant_id" query:"merchant_id"`
+	InStock      bool    `json:"inStock" form:"inStock" query:"inStock"`
 }
 
-func NewFood(id int64, name, images, food_type string, price float64, hotIndex int64, intro string, merchant_id int64) *Food {
+func NewFood(id int64, name, image, food_type string, price float64, hotIndex int64, intro string, merchant_id int64, inStock bool) *Food {
 	return &Food{
 		Id:           id,
 		Name:         name,
-		Images:       images,
+		Image:        image,
 		Type:         food_type,
 		Price:        price,
 		HotIndex:     hotIndex,
 		Introduction: intro,
 		Merchant_id:  merchant_id,
+		InStock:      inStock,
 	}
 }
 
@@ -45,23 +47,25 @@ func (f *Food) Save(tx *dbr.Tx) error {
 		_, err = tx.InsertInto("Food").
 			Pair("id", f.Id).
 			Pair("name", f.Name).
-			Pair("images", f.Images).
+			Pair("image", f.Image).
 			Pair("type", f.Type).
 			Pair("price", f.Price).
 			Pair("hotIndex", f.HotIndex).
 			Pair("introduction", f.Introduction).
 			Pair("Merchant_id", f.Merchant_id).
+			Pair("inStock", f.InStock).
 			Exec()
 	} else {
 		// if food exists, Update
 		_, err = tx.Update("Food").
 			Set("name", f.Name).
-			Set("images", f.Images).
+			Set("image", f.Image).
 			Set("type", f.Type).
 			Set("price", f.Price).
 			Set("hotIndex", f.HotIndex).
 			Set("introduction", f.Introduction).
 			Set("Merchant_id", f.Merchant_id).
+			Set("inStock", f.InStock).
 			Where("id = ?", f.Id).
 			Exec()
 	}
@@ -91,8 +95,8 @@ func (f *Food) FoodDelete(tx *dbr.Tx, food_id int64) error {
 	return err
 }
 
-func (u *Foods) Load(tx *dbr.Tx) (int, error) {
-	return tx.Select("*").
-		From("Food").
-		Load(u)
-}
+// func (u *Foods) Load(tx *dbr.Tx) (int, error) {
+// 	return tx.Select("*").
+// 		From("Food").
+// 		Load(u)
+// }
