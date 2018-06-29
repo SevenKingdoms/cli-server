@@ -45,6 +45,7 @@ func Init() *echo.Echo {
 	// Auth
 	e.GET("/api/openid", api.GetOpenid())
 	e.GET("/api/jwt", api.GetJWT())
+  e.POST("/api/register", api.PostUser())
 
 	// --- Restricted groups
 
