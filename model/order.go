@@ -7,28 +7,40 @@ import (
 )
 
 // "fmt"
+// type _Food struct {
+// 	name   string
+// 	price  float64
+// 	number int64
+// }
+// type _Foods []_Food
 
 type Order struct {
-	Id          int64  `json:"order_id" form:"order_id" query:"order_id"`
-	Date        int64  `json:"date" form:"date" query:"date"`
-	NumOfPeople int64  `json:"numOfPeople" form:"numOfPeople" query:"numOfPeople"`
-	DeskId      int64  `json:"deskId" form:"deskId" query:"deskId"`
-	Remark      string `json:"remark" form:"remark" query:"remark"`
-	User_OpenId string `json:"user_OpenId" form:"user_OpenId" query:"user_OpenId"`
-	Merchant_id int64  `json:"marchant_id" form:"marchant_id" query:"marchant_id"`
-	Status      int64  `json:"status" form:"status" query:"status"`
+	Id            int64     `json:"order_id" form:"order_id" query:"order_id"`
+	NumOfPeople   int64     `json:"num_of_people" form:"num_of_people" query:"num_of_people"`
+	DeskId        int64     `json:"desk_id" form:"desk_id" query:"desk_id"`
+	Remark        string    `json:"remark" form:"remark" query:"remark"`
+	Paid          bool      `json:"paid" form:"paid" query:"paid"`
+	User_openId   string    `json:"user_openId" form:"user_openId" query:"user_openId"`
+	Merchant_id   int64     `json:"merchant_id" form:"merchant_id" query:"merchant_id"`
+	Foods         []string  `json:"foods" form:"foods" query:"foods"`
+	Created_at    time.Time `json:"created_at" form:"created_at" query:"created_at"`
+	Merchant_name string    `json:"merchant_name" form:"merchant_name" query:"merchant_name"`
+	Merchant_tel  string    `json:"merchant_tel" form:"merchant_tel" query:"merchant_tel"`
 }
 
-func NewOrder(id, numOfPeople, deskId int64, remark, user_OpenId string, merchant_id int64, status int64) *Order {
+func NewOrder(id, numOfPeople, deskId int64, remark string, paid bool, user_OpenId string, merchant_id int64, foods []string, merchant_name, merchant_tel string, time_temp time.Time) *Order {
 	return &Order{
-		Id:          id,
-		Date:        time.Now().Unix(),
-		NumOfPeople: numOfPeople,
-		DeskId:      deskId,
-		Remark:      remark,
-		User_OpenId: user_OpenId,
-		Merchant_id: merchant_id,
-		Status:      status,
+		Id:            id,
+		NumOfPeople:   numOfPeople,
+		DeskId:        deskId,
+		Remark:        remark,
+		Paid:          paid,
+		User_openId:   user_OpenId,
+		Merchant_id:   merchant_id,
+		Foods:         foods,
+		Created_at:    time_temp,
+		Merchant_name: merchant_name,
+		Merchant_tel:  merchant_tel,
 	}
 }
 
@@ -49,22 +61,28 @@ func (u *Order) Save(tx *dbr.Tx) error {
 			Pair("numOfPeople", u.NumOfPeople).
 			Pair("deskId", u.DeskId).
 			Pair("remark", u.Remark).
-			Pair("User_openId", u.User_OpenId).
+			Pair("paid", u.Paid).
+			Pair("User_openId", u.User_openId).
 			Pair("Merchant_id", u.Merchant_id).
-			Pair("status", u.Status).
-			Pair("date", "201512111200").
+			Pair("foods", u.Foods).
+			Pair("create_at", u.Created_at.Format("2006-01-02 15:04:05")).
+			Pair("merchant_name", u.Merchant_name).
+			Pair("merchant_tel", u.Merchant_tel).
 			Exec()
 		return err
 	} else {
 		// if order exists, Update
 		_, err = tx.Update("Order").
-			Set("date", u.Date).
 			Set("numOfPeople", u.NumOfPeople).
 			Set("deskId", u.DeskId).
 			Set("remark", u.Remark).
-			Set("User_openId", u.User_OpenId).
+			Set("paid", u.Paid).
+			Set("User_openId", u.User_openId).
 			Set("Merchant_id", u.Merchant_id).
-			Set("status", u.Status).
+			Set("foods", u.Foods).
+			Set("create_at", u.Created_at.Format("2006-01-02 15:04:05")).
+			Set("merchant_name", u.Merchant_name).
+			Set("merchant_tel", u.Merchant_tel).
 			Where("id = ?", u.Id).
 			Exec()
 		return err
@@ -84,7 +102,7 @@ func (u *Orders) OpenIdLoad(tx *dbr.Tx, open_id string) (int, error) {
 func (u *Order) Load(tx *dbr.Tx, id int64) (int, error) {
 	return tx.Select("*").
 		From("Order").
-		Where("Id = ?", id).
+		Where("id = ?", id).
 		Load(u)
 }
 

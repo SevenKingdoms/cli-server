@@ -4,6 +4,7 @@ import (
 	// "strconv"
 	// "fmt"
 	"strconv"
+	"time"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/cli-server/model"
@@ -23,7 +24,7 @@ func PostOrder() echo.HandlerFunc {
 
 		tx := c.Get("Tx").(*dbr.Tx)
 
-		order := model.NewOrder(m.Id, m.NumOfPeople, m.DeskId, m.Remark, m.User_OpenId, m.Merchant_id, m.Status)
+		order := model.NewOrder(m.Id, m.NumOfPeople, m.DeskId, m.Remark, m.Paid, m.User_openId, m.Merchant_id, m.Foods, m.Merchant_name, m.Merchant_tel, time.Now())
 
 		if err := order.Save(tx); err != nil {
 
@@ -46,8 +47,12 @@ func GetOrderByOrderId() echo.HandlerFunc {
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		order := new(model.Order)
-		if _, err := order.Load(tx, number); err != nil {
+		count, err := order.Load(tx, number)
+		if err != nil {
 			logrus.Debug(err)
+			return c.JSON(fasthttp.StatusInternalServerError, NewJSON("OK", "内部错误", nil))
+		}
+		if count == 0 {
 			return c.JSON(fasthttp.StatusOK,
 				NewJSON("OK", "订单不存在", nil))
 		}
@@ -63,14 +68,18 @@ func GetOrdersByMerchantId() echo.HandlerFunc {
 		id := c.QueryParam("merchant_id")
 		tx := c.Get("Tx").(*dbr.Tx)
 		number, _ := strconv.ParseInt(id, 0, 64)
-
 		orders := new(model.Orders)
-		if _, err = orders.MerchantIdLoad(tx, number); err != nil {
+		count, err := orders.MerchantIdLoad(tx, number)
+
+		if err != nil {
 			logrus.Debug(err)
+			return c.JSON(fasthttp.StatusInternalServerError,
+				NewJSON("OK", "内部错误", nil))
+		}
+		if count == 0 {
 			return c.JSON(fasthttp.StatusOK,
 				NewJSON("OK", "商家还未有订单", nil))
 		}
-
 		return c.JSON(fasthttp.StatusOK,
 			NewJSON("OK", "成功获取商家订单列表", orders))
 	}
@@ -82,12 +91,18 @@ func GetOrdersByOpenId() echo.HandlerFunc {
 		id := c.QueryParam("open_id")
 
 		orders := new(model.Orders)
-		if _, err = orders.OpenIdLoad(tx, id); err != nil {
+
+		count, err := orders.OpenIdLoad(tx, id)
+
+		if err != nil {
 			logrus.Debug(err)
+			return c.JSON(fasthttp.StatusInternalServerError,
+				NewJSON("OK", "内部错误", nil))
+		}
+		if count == 0 {
 			return c.JSON(fasthttp.StatusOK,
 				NewJSON("OK", "用户还未有订单", nil))
 		}
-
 		return c.JSON(fasthttp.StatusOK,
 			NewJSON("OK", "成功获取用户订单列表", orders))
 	}
