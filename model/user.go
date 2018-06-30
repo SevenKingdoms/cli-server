@@ -29,13 +29,13 @@ func (u *User) Save(tx *dbr.Tx) error {
   tempUser := new(User)
   count, err:= tx.Select("*").
 		From("User").
-		Where("openId = ?", u.OpenId).
+		Where("openid = ?", u.OpenId).
 		Load(&tempUser)
 
   if count == 0 {
     // if user not exists, Create
     _, err = tx.InsertInto("User").
-      Pair("openId", u.OpenId).
+      Pair("openid", u.OpenId).
       Pair("name", u.Name).
       Pair("avatar", u.Avatar).
       Pair("phone", u.Phone).
@@ -46,7 +46,7 @@ func (u *User) Save(tx *dbr.Tx) error {
       Set("name", u.Name).
       Set("avatar", u.Avatar).
       Set("phone", u.Phone).
-      Where("openId = ?", u.OpenId).
+      Where("openid = ?", u.OpenId).
       Exec()
   }
 
@@ -56,7 +56,7 @@ func (u *User) Save(tx *dbr.Tx) error {
 func (u *User) Load(tx *dbr.Tx, open_id string) (int, error) {
 	return tx.Select("*").
 		From("User").
-		Where("openId = ?", open_id).
+		Where("openid = ?", open_id).
 		Load(u)
 }
 

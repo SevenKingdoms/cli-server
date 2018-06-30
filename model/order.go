@@ -23,6 +23,8 @@ type Order struct {
 	User_openId   string    `json:"user_openId" form:"user_openId" query:"user_openId"`
 	Merchant_id   int64     `json:"merchant_id" form:"merchant_id" query:"merchant_id"`
 	Foods         []string  `json:"foods" form:"foods" query:"foods"`
+  // TODO: string datetime := time.Now().Format(time.RFC3339)
+  // https://stackoverflow.com/questions/23415612/insert-datetime-using-now-with-go
 	Created_at    time.Time `json:"created_at" form:"created_at" query:"created_at"`
 	Merchant_name string    `json:"merchant_name" form:"merchant_name" query:"merchant_name"`
 	Merchant_tel  string    `json:"merchant_tel" form:"merchant_tel" query:"merchant_tel"`
@@ -62,7 +64,7 @@ func (u *Order) Save(tx *dbr.Tx) error {
 			Pair("deskId", u.DeskId).
 			Pair("remark", u.Remark).
 			Pair("paid", u.Paid).
-			Pair("User_openId", u.User_openId).
+			Pair("user_openId", u.User_openId).
 			Pair("Merchant_id", u.Merchant_id).
 			Pair("foods", u.Foods).
 			Pair("create_at", u.Created_at.Format("2006-01-02 15:04:05")).
@@ -77,7 +79,7 @@ func (u *Order) Save(tx *dbr.Tx) error {
 			Set("deskId", u.DeskId).
 			Set("remark", u.Remark).
 			Set("paid", u.Paid).
-			Set("User_openId", u.User_openId).
+			Set("user_openId", u.User_openId).
 			Set("Merchant_id", u.Merchant_id).
 			Set("foods", u.Foods).
 			Set("create_at", u.Created_at.Format("2006-01-02 15:04:05")).
