@@ -2,6 +2,7 @@ package model
 
 import (
 	"time"
+  "fmt"
 
 	"github.com/gocraft/dbr"
 )
@@ -20,29 +21,29 @@ type Order struct {
 	DeskId        int64     `json:"desk_id" form:"desk_id" query:"desk_id"`
 	Remark        string    `json:"remark" form:"remark" query:"remark"`
 	Paid          bool      `json:"paid" form:"paid" query:"paid"`
-	User_openId   string    `json:"user_openId" form:"user_openId" query:"user_openId"`
+	User_openId   string    `json:"open_id" form:"open_id" query:"open_id"`
 	Merchant_id   int64     `json:"merchant_id" form:"merchant_id" query:"merchant_id"`
-	Foods         []string  `json:"foods" form:"foods" query:"foods"`
-  // TODO: string datetime := time.Now().Format(time.RFC3339)
+	Foods         string    `json:"foods" form:"foods" query:"foods"`
+  // datetime := time.Now().Format(time.RFC3339)
   // https://stackoverflow.com/questions/23415612/insert-datetime-using-now-with-go
-	Created_at    time.Time `json:"created_at" form:"created_at" query:"created_at"`
+	Created_at    string    `json:"created_at" form:"created_at" query:"created_at"`
 	Merchant_name string    `json:"merchant_name" form:"merchant_name" query:"merchant_name"`
 	Merchant_tel  string    `json:"merchant_tel" form:"merchant_tel" query:"merchant_tel"`
 }
 
-func NewOrder(id, numOfPeople, deskId int64, remark string, paid bool, user_OpenId string, merchant_id int64, foods []string, merchant_name, merchant_tel string, time_temp time.Time) *Order {
+func NewOrder(id, num_of_people, deskId int64, remark string, paid bool, open_id string, merchant_id int64, foods, merchant_name, merchant_tel string) *Order {
 	return &Order{
 		Id:            id,
-		NumOfPeople:   numOfPeople,
+		NumOfPeople:   num_of_people,
 		DeskId:        deskId,
 		Remark:        remark,
 		Paid:          paid,
-		User_openId:   user_OpenId,
+		User_openId:   open_id,
 		Merchant_id:   merchant_id,
 		Foods:         foods,
-		Created_at:    time_temp,
 		Merchant_name: merchant_name,
 		Merchant_tel:  merchant_tel,
+		Created_at:    time.Now().Format(time.RFC3339),
 	}
 }
 
@@ -51,38 +52,39 @@ func (u *Order) Save(tx *dbr.Tx) error {
 	var count = 0
 	tempOrder := new(Order)
 	count, err := tx.Select("*").
-		From("Order").
+		From("KOrder").
 		Where("id = ?", u.Id).
 		Load(&tempOrder)
-
+  fmt.Println(u)
 	if count == 0 {
 		//fmt.Println("here error")
 		// if user not exists, Create
-		_, err = tx.InsertInto("Order").
+		_, err = tx.InsertInto("KOrder").
 			Pair("id", u.Id).
-			Pair("numOfPeople", u.NumOfPeople).
-			Pair("deskId", u.DeskId).
+			Pair("num_of_people", u.NumOfPeople).
+			Pair("deskid", u.DeskId).
 			Pair("remark", u.Remark).
 			Pair("paid", u.Paid).
-			Pair("user_openId", u.User_openId).
-			Pair("Merchant_id", u.Merchant_id).
+			Pair("user_openid", u.User_openId).
+			Pair("merchant_id", u.Merchant_id).
 			Pair("foods", u.Foods).
-			Pair("create_at", u.Created_at.Format("2006-01-02 15:04:05")).
+			Pair("create_at", u.Created_at).
 			Pair("merchant_name", u.Merchant_name).
 			Pair("merchant_tel", u.Merchant_tel).
 			Exec()
 		return err
 	} else {
 		// if order exists, Update
-		_, err = tx.Update("Order").
-			Set("numOfPeople", u.NumOfPeople).
-			Set("deskId", u.DeskId).
+		_, err = tx.Update("KOrder").
+			Set("num_of_people", u.NumOfPeople).
+			Set("deskid", u.DeskId).
 			Set("remark", u.Remark).
 			Set("paid", u.Paid).
-			Set("user_openId", u.User_openId).
-			Set("Merchant_id", u.Merchant_id).
+			Set("user_openid", u.User_openId).
+			Set("merchant_id", u.Merchant_id).
 			Set("foods", u.Foods).
-			Set("create_at", u.Created_at.Format("2006-01-02 15:04:05")).
+      // Set("create_at", u.Created_at.Format("2006-01-02 15:04:05")).
+      Set("create_at", u.Created_at).
 			Set("merchant_name", u.Merchant_name).
 			Set("merchant_tel", u.Merchant_tel).
 			Where("id = ?", u.Id).
@@ -96,22 +98,22 @@ type Orders []Order
 
 func (u *Orders) OpenIdLoad(tx *dbr.Tx, open_id string) (int, error) {
 	return tx.Select("*").
-		From("Order").
-		Where("User_openId = ?", open_id).
+		From("KOrder").
+		Where("user_openid = ?", open_id).
 		Load(u)
 }
 
 func (u *Order) Load(tx *dbr.Tx, id int64) (int, error) {
 	return tx.Select("*").
-		From("Order").
+		From("KOrder").
 		Where("id = ?", id).
 		Load(u)
 }
 
 func (u *Orders) MerchantIdLoad(tx *dbr.Tx, merchant_id int64) (int, error) {
 	return tx.Select("*").
-		From("Order").
-		Where("Merchant_id = ?", merchant_id).
+		From("KOrder").
+		Where("merchant_id = ?", merchant_id).
 		Load(u)
 }
 

@@ -100,10 +100,8 @@ func Init() *echo.Echo {
 		//create/ Update an Order by OrderID
 		orders.POST("", api.PostOrder())
 
-		//Orders / Get all Orders by OpenID
-		orders.GET("", api.GetOrdersByOpenId())
-		//Orders / Get all Orders by MerchantID
-		orders.GET("", api.GetOrdersByMerchantId())
+		//Orders / Get all Orders by OpenID or MerchantID
+		orders.GET("", api.GetOrdersBySomeId())
 		//Orders / Get an Order by OrderID
 		orders.GET("/:order_id", api.GetOrderByOrderId())
 
@@ -119,14 +117,14 @@ func Init() *echo.Echo {
 		comments.POST("", api.PostComment())
 
 		//Orders / Get all Orders by OpenID
-		orders.GET("", api.GetCommentsByUserId())
+		comments.GET("", api.GetCommentsByUserId())
 		//Orders / Get all Orders by MerchantID
-		orders.GET("", api.GetCommentsByMerchantId())
+		comments.GET("", api.GetCommentsByMerchantId())
 		//Orders / Get an Order by OrderID
-		orders.GET("/:id", api.GetCommentByCommentId())
+		comments.GET("/:id", api.GetCommentByCommentId())
 
 		//Orders / Delete an Order by OrderID
-		orders.DELETE("/:id", api.DeleteComment())
+		comments.DELETE("/:id", api.DeleteComment())
 
 	}
 	return e
