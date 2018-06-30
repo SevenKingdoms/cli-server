@@ -131,26 +131,26 @@ API for 快点
             "message": "成功获取",
             "data": [
                 {
-                    "merchant_id": 1,
+                    "id": 1,
                     "name": "abc",
-                    "avatar": "https://api.kuaidian.com/a.png",
+                    "logo": "https://api.kuaidian.com/a.png",
                     "tel": "12341341234",
                     "address": "广州大学城",
-                    "announcement": ["xxx"],
-                    "onsales": ["xxx优惠十元"],
-                    "open_time": "9:30-20:00",
-                    "open": 1,
+                    "introduction": "xxx",
+                    "onsales": "xxx优惠十元",
+                    "openTime": "9:30-20:00",
+                    "open": true,
                     "score": 4.3,
                 }, {
-                    "merchant_id": 2,
+                    "id": 2,
                     "name": "abc",
-                    "avatar": "https://api.kuaidian.com/a.png",
+                    "logo": "https://api.kuaidian.com/a.png",
                     "tel": "12341341234",
                     "address": "广州大学城",
-                    "announcement": ["xxx"],
-                    "onsales": ["xxx优惠十元"],
-                    "open_time": "9:30-20:00",
-                    "open": 1,
+                    "introduction": "xxx",
+                    "onsales": "xxx优惠十元",
+                    "openTime": "9:30-20:00",
+                    "open": true,
                     "score": 4.3,
                 }
             ]
@@ -162,10 +162,9 @@ API for 快点
 
         {
             "name": "abc",
-            "avatar": "https://api.kuaidian.com/a.png",
+            "logo": "https://api.kuaidian.com/a.png",
             "tel": "12341341234",
             "address": "广州大学城",
-            "announcement": ["xxx"],
         }
 
 + Response 201 (application/json)
@@ -180,16 +179,15 @@ API for 快点
                 "status": "OK",
                 "message": "成功创建",
                 "data": {
-                    "merchant_id": 2,
+                    "id": 2,
                     "name": "abc",
-                    "avatar": "https://api.kuaidian.com/a.png",
+                    "logo": "https://api.kuaidian.com/a.png",
                     "tel": "12341341234",
                     "address": "广州大学城",
-                    "announcement": ["xxx"],
                 }
             }
 
-### Get a Merchant By MerchantID [GET /merchants/merchant_id]
+### Get a Merchant By Tel [GET /merchants/tel]
 
 + Response 200 (application/json)
 
@@ -197,33 +195,33 @@ API for 快点
             "status": "OK",
             "message": "成功获取",
             "data": {
-                "merchant_id": 2,
+                "id": 2,
                 "name": "abc",
-                "avatar": "https://api.kuaidian.com/a.png",
+                "logo": "https://api.kuaidian.com/a.png",
                 "tel": "12341341234",
                 "address": "广州大学城",
-                "announcement": ["xxx"],
-                "onsales": ["xxx优惠十元"],
-                "open_time": "9:30-20:00",
-                "open": 1,
+                "introduction": "xxx",
+                "onsales": "xxx优惠十元",
+                "openTime": "9:30-20:00",
+                "open": true,
                 "score": 4.3,
             }
         }
 
-### Update a Merchant by MerchantID [PATCH /merchants/merchant_id]
+### Update a Merchant [POST /merchants]
 
 + Request (application/json)
 
         {
-            "merchant_id": 2,
+            "id": 2,
             "name": "abc",
-            "avatar": "https://api.kuaidian.com/a.png",
+            "logo": "https://api.kuaidian.com/a.png",
             "tel": "12341341234",
             "address": "广州大学城",
-            "announcement": ["xxx"],
-            "onsales": ["xxx优惠十元"],
-            "open_time": "9:30-20:00",
-            "open": 1,
+            "introduction": "xxx",
+            "onsales": "xxx优惠十元",
+            "openTime": "9:30-20:00",
+            "open": true,
             "score": 4.3,
         }
 
@@ -233,15 +231,15 @@ API for 快点
             "status": "OK",
             "message": "成功更新",
             "data": {
-                "merchant_id": 2,
+                "id": 2,
                 "name": "abc",
-                "avatar": "https://api.kuaidian.com/a.png",
+                "logo": "https://api.kuaidian.com/a.png",
                 "tel": "12341341234",
                 "address": "广州大学城",
-                "announcement": ["xxx"],
-                "onsales": ["xxx优惠十元"],
-                "open_time": "9:30-20:00",
-                "open": 1,
+                "introduction": "xxx",
+                "onsales": "xxx优惠十元",
+                "openTime": "9:30-20:00",
+                "open": true,
                 "score": 4.3,
             }
         }
@@ -257,21 +255,21 @@ API for 快点
             "message": "成功获取",
             "data": [
                 {
-                    "food_id": 01,
-                    "merchant_id": 01,
+                    "food_id": 1,
+                    "merchant_id": 1,
                     "name": "巨无霸",
                     "image": "https://api.kuaidian.com/a.png",
-                    "type": "汉堡, 新品",
-                    "price": 100,
-                    "introduction": "由牛肉、青菜组成"
+                    "type": "汉堡,新品",
+                    "price": 100.5,
+                    "introduction": "由牛肉组成"
                 }, {
-                    "food_id": 02,
-                    "merchant_id": 01,
+                    "food_id": 2,
+                    "merchant_id": 1,
                     "name": "巨无霸1",
                     "image": "https://api.kuaidian.com/a.png",
                     "type": "汉堡",
-                    "price": 100,
-                    "introduction": "由牛肉、青菜组成"
+                    "price": 20,
+                    "introduction": "由青菜组成"
                 }
             ]
         }
@@ -376,26 +374,27 @@ API for 快点
             "message": "成功获取",
             "data": [
                 {
-                    "order_id": 23,
+                    "id": 23,
                     "merchant_id": 1,
                     "merchant_name": "兰州牛肉",
                     "merchant_tel": "12341234123",
                     "open_id": "abc",
                     "desk_id": 2,
                     "num_of_people": 3,
-                    "paid": 1,
+                    "paid": true,
                     "foods": ["汉堡, 12.5, 1", "芝士蛋糕, 22.5, 2"],
+                    // "foods": "汉堡,12.5,1,芝士蛋糕,22.5,2",
                     "remark": "不要辣",
                     "create_at": "Thu Jun 28 2018 23:52:21 GMT+0800 (CST)"
                 }, {
-                    "order_id": 33,
+                    "id": 33,
                     "merchant_id": 1,
                     "merchant_name": "兰州牛肉",
                     "merchant_tel": "12341234123",
                     "open_id": "abc",
                     "desk_id": 2,
                     "num_of_people": 3,
-                    "paid": 1,
+                    "paid": true,
                     "foods": ["汉堡, 12.5, 1", "芝士蛋糕, 22.5, 2"],
                     "remark": "不要辣",
                     "create_at": "Thu Jun 28 2018 23:52:21 GMT+0800 (CST)"
@@ -414,7 +413,7 @@ API for 快点
             "open_id": "abc",
             "desk_id": 2,
             "num_of_people": 3,
-            "paid": 1,
+            "paid": true,
             "foods": ["汉堡, 12.5, 1", "芝士蛋糕, 22.5, 2"],
             "remark": "不要辣"
         }
@@ -431,14 +430,14 @@ API for 快点
                 "status": "OK",
                 "message": "成功创建",
                 "data": {
-                    "order_id": 23,
+                    "id": 23,
                     "merchant_id": 1,
                     "merchant_name": "兰州牛肉",
                     "merchant_tel": "12341234123",
                     "open_id": "abc",
                     "desk_id": 2,
                     "num_of_people": 3,
-                    "paid": 1,
+                    "paid": true,
                     "foods": ["汉堡, 12.5, 1", "芝士蛋糕, 22.5, 2"],
                     "remark": "不要辣",
                     "create_at": "Thu Jun 28 2018 23:52:21 GMT+0800 (CST)"
@@ -460,7 +459,7 @@ API for 快点
                 "open_id": "abc",
                 "desk_id": 2,
                 "num_of_people": 3,
-                "paid": 1,
+                "paid": true,
                 "foods": ["汉堡, 12.5, 1", "芝士蛋糕, 22.5, 2"],
                 "remark": "不要辣",
                 "create_at": "Thu Jun 28 2018 23:52:21 GMT+0800 (CST)"
@@ -476,27 +475,27 @@ API for 快点
             "message": "成功获取",
             "data":[
                 {
-                    "order_id": 23,
+                    "id": 23,
                     "merchant_id": 1,
                     "merchant_name": "兰州牛肉",
                     "merchant_tel": "12341234123",
                     "open_id": "abc",
                     "desk_id": 2,
                     "num_of_people": 3,
-                    "paid": 1,
+                    "paid": true,
                     "foods": ["汉堡, 12.5, 1", "芝士蛋糕, 22.5, 2"],
                     "remark": "不要辣",
                     "create_at": "Thu Jun 28 2018 23:52:21 GMT+0800 (CST)"
                 },
                 {
-                    "order_id": 33,
+                    "id": 33,
                     "merchant_id": 1,
                     "merchant_name": "兰州牛肉",
                     "merchant_tel": "12341234123",
                     "open_id": "abc",
                     "desk_id": 2,
                     "num_of_people": 3,
-                    "paid": 1,
+                    "paid": true,
                     "foods": ["汉堡, 12.5, 1", "芝士蛋糕, 22.5, 2"],
                     "remark": "不要辣",
                     "create_at": "Thu Jun 28 2018 23:52:21 GMT+0800 (CST)"
@@ -509,7 +508,7 @@ API for 快点
 + Request (application/json)
 
         {
-            "paid": 1
+            "paid": true
         }
 
 + Response 200 (application/json)
@@ -518,14 +517,14 @@ API for 快点
             "status": "OK",
             "message": "成功更新",
             "data": {
-                "order_id": 23,
+                "id": 23,
                 "merchant_id": 1,
                 "merchant_name": "兰州牛肉",
                 "merchant_tel": "12341234123",
                 "open_id": "abc",
                 "desk_id": 2,
                 "num_of_people": 3,
-                "paid": 1,
+                "paid": true,
                 "foods": ["汉堡, 12.5, 1", "芝士蛋糕, 22.5, 2"],
                 "remark": "不要辣",
                 "create_at": "Thu Jun 28 2018 23:52:21 GMT+0800 (CST)"
