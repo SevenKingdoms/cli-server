@@ -23,7 +23,7 @@ func PostComment() echo.HandlerFunc {
 
 		tx := c.Get("Tx").(*dbr.Tx)
 
-		comment := model.NewComment(f.Id, f.Description,f.Images,f.User_openId,f.Merchant_id,f.Score)
+		comment := model.NewComment(f.Id, f.Description, f.Images, f.User_openId, f.Merchant_id, f.Score)
 
 		if err := comment.Save(tx); err != nil {
 			logrus.Debug(err)
@@ -63,7 +63,7 @@ func GetCommentsByMerchantId() echo.HandlerFunc {
 func GetCommentsByUserId() echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
 
-		id := c.QueryParam("User_openId")
+		id := c.QueryParam("user_openid")
 
 		tx := c.Get("Tx").(*dbr.Tx)
 
@@ -119,7 +119,7 @@ func DeleteComment() echo.HandlerFunc {
 		comment := new(model.Comment)
 		if err := comment.CommentDelete(tx, number); err != nil {
 			logrus.Debug(err)
-			return echo.NewHTTPError(fasthttp.StatusNotFound, "评论  does not exists.")
+			return echo.NewHTTPError(fasthttp.StatusNotFound, "删除失败，网络或者评论不存在.")
 		}
 		return c.JSON(fasthttp.StatusOK,
 			NewJSON("OK", "成功删除评论", comment))
