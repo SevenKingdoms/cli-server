@@ -40,11 +40,16 @@ func GetMerchant() echo.HandlerFunc {
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		merchant := new(model.Merchant)
-		if _, err := merchant.Load(tx, tel); err != nil {
+		count, err := merchant.Load(tx, tel)
+		if err != nil {
 			logrus.Debug(err)
+			return c.JSON(fasthttp.StatusInternalServerError, NewJSON("OK", "内部错误", nil))
+		}
+		if count == 0 {
 			return c.JSON(fasthttp.StatusOK,
 				NewJSON("OK", "商家不存在", nil))
 		}
+
 		return c.JSON(fasthttp.StatusOK,
 			NewJSON("OK", "成功获取商家", merchant))
 	}
@@ -55,10 +60,14 @@ func GetAllMerchant() echo.HandlerFunc {
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		merchants := new(model.Merchants)
-		if _, err = merchants.Load(tx); err != nil {
+		count, err := merchants.Load(tx)
+		if err != nil {
 			logrus.Debug(err)
+			return c.JSON(fasthttp.StatusInternalServerError, NewJSON("OK", "内部错误", nil))
+		}
+		if count == 0 {
 			return c.JSON(fasthttp.StatusOK,
-				NewJSON("OK", "商家不存在", nil))
+				NewJSON("OK", "不存在商家", nil))
 		}
 
 		return c.JSON(fasthttp.StatusOK,
