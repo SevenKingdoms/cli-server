@@ -45,20 +45,20 @@ func Init() *echo.Echo {
 	// Auth
 	e.GET("/api/openid", api.GetOpenid())
 	e.GET("/api/jwt", api.GetJWT())
-  e.POST("/api/register", api.PostUser())
+	e.POST("/api/register", api.PostUser())
 
 	// --- Restricted groups
 
 	// Configure middleware with the custom claims type
-	config := echoMw.JWTConfig{
-		Claims:     &api.JWTCustomClaims{},
-		SigningKey: []byte("secret"),
-	}
+	// config := echoMw.JWTConfig{
+	// 	Claims:     &api.JWTCustomClaims{},
+	// 	SigningKey: []byte("secret"),
+	// }
 
 	// Users Collection
 	users := e.Group("/api/users")
 	{
-		users.Use(echoMw.JWTWithConfig(config))
+		//users.Use(echoMw.JWTWithConfig(config))
 
 		// Creat/Update an User
 		users.POST("", api.PostUser())
@@ -70,7 +70,7 @@ func Init() *echo.Echo {
 	//Merchants Collection
 	merchants := e.Group("/api/merchants")
 	{
-		users.Use(echoMw.JWTWithConfig(config))
+		//users.Use(echoMw.JWTWithConfig(config))
 
 		//post a merchants
 		merchants.POST("", api.PostMerchant())
@@ -81,7 +81,7 @@ func Init() *echo.Echo {
 	}
 	foods := e.Group("/api/foods")
 	{
-		users.Use(echoMw.JWTWithConfig(config))
+		//users.Use(echoMw.JWTWithConfig(config))
 
 		// Create、Update a New Food,with a merchant-id
 		foods.POST("", api.PostFood())
@@ -95,7 +95,7 @@ func Init() *echo.Echo {
 	}
 	orders := e.Group("/api/orders")
 	{
-		users.Use(echoMw.JWTWithConfig(config))
+		// users.Use(echoMw.JWTWithConfig(config))
 
 		//create/ Update an Order by OrderID
 		orders.POST("", api.PostOrder())
@@ -111,6 +111,23 @@ func Init() *echo.Echo {
 		orders.DELETE("/:order_id", api.DeleteOrderByOrderId())
 
 	}
+	comments := e.Group("/api/comments")
+	{
+		// users.Use(echoMw.JWTWithConfig(config))
 
+		//create/ Update an Order by OrderID
+		comments.POST("", api.PostComment())
+
+		//Orders / Get all Orders by OpenID
+		orders.GET("", api.GetCommentsByUserId())
+		//Orders / Get all Orders by MerchantID
+		orders.GET("", api.GetCommentsByMerchantId())
+		//Orders / Get an Order by OrderID
+		orders.GET("/:id", api.GetCommentByCommentId())
+
+		//Orders / Delete an Order by OrderID
+		orders.DELETE("/:id", api.DeleteComment())
+
+	}
 	return e
 }
