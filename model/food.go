@@ -13,20 +13,20 @@ type Food struct {
 	Image        string  `json:"image" form:"image" query:"image"`
 	Type         string  `json:"type" form:"type" query:"type"`
 	Price        float64 `json:"price" form:"price" query:"price"`
-	HotIndex     int64   `json:"hotIndex" form:"hotIndex" query:"hotIndex"`
+	HotIndex     int64   `json:"hot_index" form:"hot_index" query:"hot_index"`
 	Introduction string  `json:"introduction" form:"introduction" query:"introduction"`
 	Merchant_id  int64   `json:"merchant_id" form:"merchant_id" query:"merchant_id"`
 	InStock      bool    `json:"inStock" form:"inStock" query:"inStock"`
 }
 
-func NewFood(id int64, name, image, food_type string, price float64, hotIndex int64, intro string, merchant_id int64, inStock bool) *Food {
+func NewFood(id int64, name, image, food_type string, price float64, hot_index int64, intro string, merchant_id int64, inStock bool) *Food {
 	return &Food{
 		Id:           id,
 		Name:         name,
 		Image:        image,
 		Type:         food_type,
 		Price:        price,
-		HotIndex:     hotIndex,
+		HotIndex:     hot_index,
 		Introduction: intro,
 		Merchant_id:  merchant_id,
 		InStock:      inStock,
@@ -50,7 +50,7 @@ func (f *Food) Save(tx *dbr.Tx) error {
 			Pair("image", f.Image).
 			Pair("type", f.Type).
 			Pair("price", f.Price).
-			Pair("hotIndex", f.HotIndex).
+			Pair("hot_index", f.HotIndex).
 			Pair("introduction", f.Introduction).
 			Pair("Merchant_id", f.Merchant_id).
 			Pair("inStock", f.InStock).
@@ -62,7 +62,7 @@ func (f *Food) Save(tx *dbr.Tx) error {
 			Set("image", f.Image).
 			Set("type", f.Type).
 			Set("price", f.Price).
-			Set("hotIndex", f.HotIndex).
+			Set("hot_index", f.HotIndex).
 			Set("introduction", f.Introduction).
 			Set("Merchant_id", f.Merchant_id).
 			Set("inStock", f.InStock).
