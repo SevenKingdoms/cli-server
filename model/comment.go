@@ -11,7 +11,7 @@ type Comment struct {
 	Id          int64   `json:"id" form:"id" query:"id"`
 	Description string  `json:"description" form:"description" query:"description"`
 	Images      string  `json:"images" form:"images" query:"images"`
-	User_openId string  `json:"user_openId" form:"user_openId" query:"user_openId"`
+	User_openId string  `json:"user_openid" form:"user_openid" query:"user_openid"`
 	Merchant_id int64   `json:"merchant_id" form:"merchant_id" query:"merchant_id"`
 	Score       float64 `json:"score" form:"score" query:"score"`
 }
@@ -39,8 +39,8 @@ func (m *Comment) Save(tx *dbr.Tx) error {
 			Pair("id", m.Id).
 			Pair("description", m.Description).
 			Pair("images", m.Images).
-			Pair("user_openId", m.User_openId).
-			Pair("Merchant_id", m.Merchant_id).
+			Pair("user_openid", m.User_openId).
+			Pair("merchant_id", m.Merchant_id).
 			Pair("score", m.Score).
 			Exec()
 		return err
@@ -70,14 +70,14 @@ type Comments []Comment
 func (m *Comments) MerchantLoad(tx *dbr.Tx, id int64) (int, error) {
 	return tx.Select("*").
 		From("Comment").
-		Where("Merchant_id= ?", id).
+		Where("merchant_id= ?", id).
 		Load(m)
 }
 
 func (m *Comments) UserIdLoad(tx *dbr.Tx, id string) (int, error) {
 	return tx.Select("*").
 		From("Comment").
-		Where("User_openId= ?", id).
+		Where("user_openid= ?", id).
 		Load(m)
 }
 
