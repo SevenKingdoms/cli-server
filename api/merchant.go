@@ -32,6 +32,7 @@ func PostMerchant() echo.HandlerFunc {
 			NewJSON("OK", "成功创建/更改商家", merchant))
 	}
 }
+
 func GetMerchant() echo.HandlerFunc {
 	return func(c echo.Context) (err error) {
 		tel := c.Param("tel")

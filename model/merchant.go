@@ -2,11 +2,13 @@ package model
 
 import (
 	// "time"
+	"fmt"
+
 	"github.com/gocraft/dbr"
 )
 
 type Merchant struct {
-	ID           int64   `json:"merchant_id" form:"merchant_id" query:"merchant_id"`
+	ID           int64   `json:"id" form:"id" query:"id"`
 	Name         string  `json:"name" form:"name" query:"name"`
 	HotIndex     int64   `json:"hotIndex" form:"hotIndex" query:"hotIndex"`
 	Introduction string  `json:"introduction" form:"introduction" query:"introduction"`
@@ -42,20 +44,23 @@ func NewMerchant(id, hotIndex int64, name, introduction, logo, address, images, 
 func (m *Merchant) Save(tx *dbr.Tx) error {
 	var count = 0
 	tempMerchant := new(Merchant)
+	fmt.Println(m)
 	count, _ = tx.Select("*").From("Merchant").Where("id = ?", m.ID).Load(&tempMerchant)
+
+	fmt.Println(count)
 	if count == 0 {
 		_, err := tx.InsertInto("Merchant").
 			Pair("name", m.Name).
+			Pair("tel", m.Tel).
+			Pair("password", m.Password).
 			Pair("hotIndex", m.HotIndex).
 			Pair("introduction", m.Introduction).
 			Pair("logo", m.Logo).
-			Pair("address", m.Address).
 			Pair("images", m.Images).
-			Pair("tel", m.Tel).
-			Pair("password", m.Password).
-			Pair("openTime", m.OpenTime).
 			Pair("open", m.Open).
+			Pair("openTime", m.OpenTime).
 			Pair("score", m.Score).
+			Pair("address", m.Address).
 			Pair("onsales", m.Onsales).
 			Exec()
 		return err
@@ -81,7 +86,6 @@ func (m *Merchant) Save(tx *dbr.Tx) error {
 }
 
 func (m *Merchant) Load(tx *dbr.Tx, tel string) (int, error) {
-	// TODO: wnat is the int in (int, error)
 	return tx.Select("*").
 		From("Merchant").
 		Where("tel = ?", tel).
