@@ -16,10 +16,10 @@ type Food struct {
 	HotIndex     int64   `json:"hot_index" form:"hot_index" query:"hot_index"`
 	Introduction string  `json:"introduction" form:"introduction" query:"introduction"`
 	Merchant_id  int64   `json:"merchant_id" form:"merchant_id" query:"merchant_id"`
-	InStock      bool    `json:"inStock" form:"inStock" query:"inStock"`
+	InStock      bool    `json:"in_stock" form:"in_stock" query:"in_stock"`
 }
 
-func NewFood(id int64, name, image, food_type string, price float64, hot_index int64, intro string, merchant_id int64, inStock bool) *Food {
+func NewFood(id int64, name, image, food_type string, price float64, hot_index int64, intro string, merchant_id int64, in_stock bool) *Food {
 	return &Food{
 		Id:           id,
 		Name:         name,
@@ -29,7 +29,7 @@ func NewFood(id int64, name, image, food_type string, price float64, hot_index i
 		HotIndex:     hot_index,
 		Introduction: intro,
 		Merchant_id:  merchant_id,
-		InStock:      inStock,
+		InStock:      in_stock,
 	}
 }
 
@@ -52,8 +52,8 @@ func (f *Food) Save(tx *dbr.Tx) error {
 			Pair("price", f.Price).
 			Pair("hot_index", f.HotIndex).
 			Pair("introduction", f.Introduction).
-			Pair("Merchant_id", f.Merchant_id).
-			Pair("inStock", f.InStock).
+			Pair("merchant_id", f.Merchant_id).
+			Pair("in_stock", f.InStock).
 			Exec()
 	} else {
 		// if food exists, Update
@@ -64,8 +64,8 @@ func (f *Food) Save(tx *dbr.Tx) error {
 			Set("price", f.Price).
 			Set("hot_index", f.HotIndex).
 			Set("introduction", f.Introduction).
-			Set("Merchant_id", f.Merchant_id).
-			Set("inStock", f.InStock).
+			Set("merchant_id", f.Merchant_id).
+			Set("in_stock", f.InStock).
 			Where("id = ?", f.Id).
 			Exec()
 	}
