@@ -21,7 +21,7 @@ func PostMerchant() echo.HandlerFunc {
 		tx := c.Get("Tx").(*dbr.Tx)
 
 		merchant := model.NewMerchant(m.ID, m.HotIndex, m.Name,
-			m.Introduction, m.Logo, m.Address, m.Images, m.Tel, m.Password, m.OpenTime, m.Open)
+			m.Introduction, m.Logo, m.Address, m.Images, m.Tel, m.Password, m.OpenTime, m.Open, m.Score, m.Onsales)
 
 		if err := merchant.Save(tx); err != nil {
 			logrus.Debug(err)

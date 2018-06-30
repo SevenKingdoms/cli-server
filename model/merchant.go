@@ -6,33 +6,36 @@ import (
 )
 
 type Merchant struct {
-	ID           int64  `json:"id" form:"id" query:"id"`
-	Name         string `json:"name" form:"name" query:"name"`
-	HotIndex     int64  `json:"hotIndex" form:"hotIndex" query:"hotIndex"`
-	Introduction string `json:"introduction" form:"introduction" query:"introduction"`
-	Logo         string `json:"logo" form:"logo" query:"logo"`
-  Address      string `json:"address" form:"address" query:"address"`
-  Images       string `json:"images" form:"images" query:"images"`
-	Tel          string `json:"tel" form:"tel" query:"tel"`
-  Password     string `json:"password" form:"password" query:"password"`
-  OpenTime     string `json:"openTime" form:"openTime" query:"openTime"`
-	Open         bool   `json:"open" form:"open" query:"open"`
+	ID           int64   `json:"merchant_id" form:"merchant_id" query:"merchant_id"`
+	Name         string  `json:"name" form:"name" query:"name"`
+	HotIndex     int64   `json:"hotIndex" form:"hotIndex" query:"hotIndex"`
+	Introduction string  `json:"introduction" form:"introduction" query:"introduction"`
+	Logo         string  `json:"logo" form:"logo" query:"logo"`
+	Address      string  `json:"address" form:"address" query:"address"`
+	Images       string  `json:"images" form:"images" query:"images"`
+	Tel          string  `json:"tel" form:"tel" query:"tel"`
+	Password     string  `json:"password" form:"password" query:"password"`
+	OpenTime     string  `json:"openTime" form:"openTime" query:"openTime"`
+	Open         bool    `json:"open" form:"open" query:"open"`
+	Score        float64 `json:"score" form:"score" query:"score"`
+	Onsales      string  `json:"onsales" form:"onsales" query:"onsales"`
 }
 
-func NewMerchant(id, hotIndex int64, name, introduction, logo, address, images, tel, password, openTime string, open bool) *Merchant {
+func NewMerchant(id, hotIndex int64, name, introduction, logo, address, images, tel, password, openTime string, open bool, score float64, onsales string) *Merchant {
 	return &Merchant{
 		ID:           id,
 		Name:         name,
 		HotIndex:     hotIndex,
 		Introduction: introduction,
 		Logo:         logo,
-    Address:      address,
+		Address:      address,
 		Images:       images,
 		Tel:          tel,
 		Password:     password,
-    Open:         open,
-    OpenTime:     openTime,
-		// CreatedAt:  time.Now().Unix(), // to string
+		Open:         open,
+		OpenTime:     openTime,
+		Score:        score,
+		Onsales:      onsales,
 	}
 }
 
@@ -45,13 +48,15 @@ func (m *Merchant) Save(tx *dbr.Tx) error {
 			Pair("name", m.Name).
 			Pair("hotIndex", m.HotIndex).
 			Pair("introduction", m.Introduction).
-      Pair("logo", m.Logo).
+			Pair("logo", m.Logo).
 			Pair("address", m.Address).
 			Pair("images", m.Images).
 			Pair("tel", m.Tel).
-      Pair("password", m.Password).
-      Pair("openTime", m.OpenTime).
+			Pair("password", m.Password).
+			Pair("openTime", m.OpenTime).
 			Pair("open", m.Open).
+			Pair("score", m.Score).
+			Pair("onsales", m.Onsales).
 			Exec()
 		return err
 	} else {
@@ -63,9 +68,11 @@ func (m *Merchant) Save(tx *dbr.Tx) error {
 			Set("address", m.Address).
 			Set("images", m.Images).
 			Set("tel", m.Tel).
-      Set("password", m.Password).
-      Set("openTime", m.OpenTime).
+			Set("password", m.Password).
+			Set("openTime", m.OpenTime).
 			Set("open", m.Open).
+			Set("score", m.Score).
+			Set("onsales", m.Onsales).
 			Where("id = ?", m.ID).
 			Exec()
 		return err
