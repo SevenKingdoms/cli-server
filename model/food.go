@@ -45,7 +45,6 @@ func (f *Food) Save(tx *dbr.Tx) error {
 	if count == 0 {
 		// if food not exists, Create
 		_, err = tx.InsertInto("Food").
-			Pair("id", f.Id).
 			Pair("name", f.Name).
 			Pair("image", f.Image).
 			Pair("type", f.Type).

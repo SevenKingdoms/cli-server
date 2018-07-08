@@ -60,7 +60,6 @@ func (u *Order) Save(tx *dbr.Tx) error {
 		//fmt.Println("here error")
 		// if user not exists, Create
 		_, err = tx.InsertInto("KOrder").
-			Pair("id", u.Id).
 			Pair("num_of_people", u.NumOfPeople).
 			Pair("deskid", u.DeskId).
 			Pair("remark", u.Remark).
